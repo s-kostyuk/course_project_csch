@@ -9,9 +9,9 @@ entity top is
 	port(		
 		clk : in STD_LOGIC; 
 		reset : in STD_LOGIC; 
-		d1 : in STD_LOGIC_VECTOR(2*N downto 0); 
+		d1 : in STD_LOGIC_VECTOR(2*N-1 downto 0); 
 		d2 : in STD_LOGIC_VECTOR(N downto 0);
-		r : out STD_LOGIC_VECTOR(N downto 0);
+		r : out STD_LOGIC_VECTOR(N-1 downto 0);
 		IRQ1, IRQ2 : out std_logic
 		);
 end top;
@@ -29,9 +29,9 @@ architecture top of top is
 	component operational_unit port(			
 			clk,rst : in STD_LOGIC;
 			y : in STD_LOGIC_VECTOR(18 downto 1);
-			d1 : in STD_LOGIC_VECTOR(2*N downto 0);
+			d1 : in STD_LOGIC_VECTOR(2*N-1 downto 0);
 			d2 : in STD_LOGIC_VECTOR(N downto 0);
-			r:out STD_LOGIC_VECTOR(N downto 0);
+			r:out STD_LOGIC_VECTOR(N-1 downto 0);
 			x:out STD_LOGIC_vector(7 downto 1);
 			IRQ1, IRQ2: out std_logic
 			); 

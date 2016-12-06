@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity top is
 	generic(
-		N: integer := 4
+		N: integer := 8
 		);
 	port(		
 		clk : in STD_LOGIC; 
@@ -26,7 +26,11 @@ architecture top of top is
 			);
 	end component; 
 	
-	component operational_unit port(			
+	component operational_unit 
+		generic(
+			N: integer := 8
+			);
+		port(			
 			clk,rst : in STD_LOGIC;
 			y : in STD_LOGIC_VECTOR(16 downto 1);
 			d1 : in STD_LOGIC_VECTOR(2*N-1 downto 0);

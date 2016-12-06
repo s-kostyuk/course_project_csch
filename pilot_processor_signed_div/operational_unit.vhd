@@ -71,8 +71,8 @@ begin
 	x(1) <= '1' when B = 0 else '0'; 
 	x(2) <= '1' when (A(2*N-1) xor B(N)) = '1' else '0';
 	x(3) <= '1' when CnT = 0 else '0';
-	--x(4) <= '1' when (A(2*N-1) xor TgS) = '1' else '0';
-	x(4) <= '0';
+	x(4) <= '1' when (A(2*N-1) xor TgS) = '1' else '0';
+	--x(4) <= '0';
 	--x(4) <= '1' when (TgS xor B(N)) = '1' else '0';
 	x(5) <= '1' when B(N) = '1' else '0';
 	x(6) <= '1' when (B(N) xor TgS) = '1' else '0';

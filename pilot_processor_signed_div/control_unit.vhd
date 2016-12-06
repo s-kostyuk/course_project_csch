@@ -86,7 +86,7 @@ begin
 					end if;
 				else
 					NextState <= a11;
-					if x(4) = '1' then
+					if x(4) = '0' then
 						if x(5) = '0' then
 							y(6) <= '1';
 						else

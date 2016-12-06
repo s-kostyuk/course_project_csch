@@ -9,9 +9,9 @@ entity top is
 	port(		
 		clk : in STD_LOGIC; 
 		reset : in STD_LOGIC; 
-		d1 : in STD_LOGIC_VECTOR(2*N downto 0); 
-		d2 : in STD_LOGIC_VECTOR(N downto 0);
-		r : out STD_LOGIC_VECTOR(N downto 0);
+		d1 : in STD_LOGIC_VECTOR(2*N-1 downto 0); 
+		d2 : in STD_LOGIC_VECTOR(N-1 downto 0);
+		r : out STD_LOGIC_VECTOR(N-1 downto 0);
 		IRQ1, IRQ2 : out std_logic
 		);
 end top;
@@ -21,24 +21,24 @@ architecture top of top is
 		port(
 			clk : in std_logic; 
 			reset : in std_logic;
-			x : in std_logic_vector(7 downto 1);
-			y : out STD_LOGIC_VECTOR(18 downto 1)
+			x : in std_logic_vector(8 downto 1);
+			y : out STD_LOGIC_VECTOR(16 downto 1)
 			);
 	end component; 
 	
 	component operational_unit port(			
 			clk,rst : in STD_LOGIC;
-			y : in STD_LOGIC_VECTOR(18 downto 1);
-			d1 : in STD_LOGIC_VECTOR(2*N downto 0);
-			d2 : in STD_LOGIC_VECTOR(N downto 0);
-			r:out STD_LOGIC_VECTOR(N downto 0);
-			x:out STD_LOGIC_vector(7 downto 1);
+			y : in STD_LOGIC_VECTOR(16 downto 1);
+			d1 : in STD_LOGIC_VECTOR(2*N-1 downto 0);
+			d2 : in STD_LOGIC_VECTOR(N-1 downto 0);
+			r:out STD_LOGIC_VECTOR(N-1 downto 0);
+			x:out STD_LOGIC_vector(8 downto 1);
 			IRQ1, IRQ2: out std_logic
 			); 
 	end component;
 	
-	signal y : std_logic_vector(18 downto 1); 
-	signal x : std_logic_vector(7 downto 1);
+	signal y : std_logic_vector(16 downto 1); 
+	signal x : std_logic_vector(8 downto 1);
 	signal nclk:std_logic;
 	
 begin

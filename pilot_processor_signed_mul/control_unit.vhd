@@ -13,7 +13,7 @@ architecture control_unit of control_unit is
 	signal State, NextState: State_type;
 begin
 	-- NextState logic (combinatorial)
-	Sreg0_NextState: process (State)
+	Sreg0_NextState: process (State, x)
 	begin
 		-- инициализация значений выходов
 		y <= (others => '0');

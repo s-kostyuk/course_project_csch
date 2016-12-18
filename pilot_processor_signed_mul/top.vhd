@@ -36,13 +36,10 @@ architecture top of top is
 	
 	signal y : std_logic_vector(12 downto 1); 
 	signal x : std_logic_vector(4 downto 1);
-	signal nclk:std_logic;
 	
 begin
-	nclk<=not clk;
-	
 	dd1:control_unit port map (clk,reset,x,y);
 	
-	dd2:operational_unit port map (clk => nclk ,rst => reset,d1 => d1, d2 =>d2, y=>y, x=>x, r =>r);
+	dd2:operational_unit port map (clk => clk ,rst => reset,d1 => d1, d2 =>d2, y=>y, x=>x, r =>r);
 	
 end top;

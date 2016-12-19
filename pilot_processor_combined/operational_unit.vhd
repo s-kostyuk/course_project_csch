@@ -58,6 +58,7 @@ begin
 			A <= Ain;
 			B1 <= B1in;
 			B2 <= B2in;
+			TgS <= TgSin;
 			CnT <= CnTin;
 			C <= Cin;
 			Overflow <= of_in;

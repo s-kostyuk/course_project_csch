@@ -4,22 +4,22 @@ use ieee.std_logic_unsigned.all;
 
 entity decoder is
 	generic(
-		M: integer := 4
+		N: integer := 4
 		);
-	port(D: in std_logic_vector (M-1 downto 0);
+	port(D: in std_logic_vector (N-1 downto 0);
 		En: in std_logic;
-		Q: out std_logic_vector (2**M -1 downto 0)
+		Q: out std_logic_vector (2**N -1 downto 0)
 		); 
 end entity;
 
 architecture decoder of decoder is
 begin
 	process(D, En) is
-		variable vQ: std_logic_vector(2**M - 1 downto 0);
+		variable vQ: std_logic_vector(2**N - 1 downto 0);
 	begin
 		vQ := (others => '0');
 		
-		if (En = '1') then -- Прямой En
+		if (En = '0') then -- Инверсный En
 			vQ(conv_integer(D)) := '1';
 		end if;
 		

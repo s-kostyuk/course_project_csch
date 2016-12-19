@@ -74,25 +74,51 @@ architecture control_unit of control_unit is
 	signal PC:integer;
 	signal y_buf: std_logic_vector(25 downto 1);
 	signal x_decoded: std_logic_vector(15 downto 0);
+	signal y1_decoded: std_logic_vector(15 downto 0);
+	signal y2_decoded: std_logic_vector(7 downto 0);
+	signal y3_decoded: std_logic_vector(3 downto 0);
+	signal y4_decoded: std_logic_vector(3 downto 0);
+	signal not_p: std_logic;
 	
 	component decoder is
 		generic(
-			M: integer := 4
+			N: integer := 4
 			);
-		port(D: in std_logic_vector (M-1 downto 0);
+		port(D: in std_logic_vector (N-1 downto 0);
 			En: in std_logic;
-			Q: out std_logic_vector (2**M -1 downto 0)
+			Q: out std_logic_vector (2**N -1 downto 0)
 			); 
 	end component;
 begin
-	x_dc: decoder port map(D => RegCom(10 downto 7), En => RegCom(11), Q => x_decoded);
+	not_p <= not RegCom(11);
+	
+	x_dc: decoder
+		generic map(N => 4)
+		port map(D => RegCom(10 downto 7), En => not_p, Q => x_decoded);
+	
+	y1_dc: decoder
+		generic map(N => 4)
+		port map(D => RegCom(10 downto 7), En => RegCom(11), Q => y1_decoded);
+		
+	y2_dc: decoder
+		generic map(N => 3)
+		port map(D => RegCom(6 downto 4), En => RegCom(11), Q => y2_decoded);
+		
+	y3_dc: decoder
+		generic map(N => 2)
+		port map(D => RegCom(3 downto 2), En => RegCom(11), Q => y3_decoded);
+		
+	y4_dc: decoder
+		generic map(N => 2)
+		port map(D => RegCom(1 downto 0), En => RegCom(11), Q => y4_decoded);
+	
 	
 	process(rst,clk) is
 		variable PCv:integer range 0 to 54;
 	begin
 		if rst='0' then PCv:=0;
 		elsif rising_edge(clk) then
-			if RegCom(11)='1' and (x_decoded(11 downto 1) and x) = "0000000000" then
+			if RegCom(11)='1' and (x_decoded(11 downto 1) and x) = 0 then
 				PCv:=conv_integer(RegCom(6 downto 1));
 			else
 				PCv:=PCv+1;
@@ -102,116 +128,32 @@ begin
 		PC<=PCv;
 	end process;
 	
-	process (RegCom) is
-		variable Y1: std_logic_vector (3 downto 0);
-		variable Y2: std_logic_vector (2 downto 0);
-		variable Y3: std_logic_vector (1 downto 0);
-		variable Y4: std_logic_vector (1 downto 0);
-		
-	begin
-		y_buf <= (others => '0');
-		Y1 := RegCom(10 downto 7);
-		Y2 := RegCom(6  downto 4);
-		Y3 := RegCom(3  downto 2);
-		Y4 := RegCom(1  downto 0);
-		
-		case Y1 is
-			when "0001" => 
-				y_buf(1) <= '1';
-			
-			when "0010" =>
-				y_buf(5) <= '1';
-			
-			when "0011" =>
-				y_buf(6) <= '1';
-			
-			when "0100" =>
-				y_buf(9) <= '1';
-			
-			when "0101" =>
-				y_buf(10) <= '1';
-			
-			when "0110" =>
-				y_buf(12) <= '1';
-			
-			when "0111" =>
-				y_buf(15) <= '1';
-			
-			when "1000" =>
-				y_buf(20) <= '1';
-			
-			when "1001" =>
-				y_buf(21) <= '1';
-			
-			when "1010" =>
-				y_buf(22) <= '1';
-			
-			when "1011" =>
-				y_buf(23) <= '1';
-			
-			when "1100" =>
-				y_buf(24) <= '1';
-			
-			when "1101" =>
-				y_buf(25) <= '1';
-			
-			when others => null; 
-			
-		end case;
-		
-		case Y2 is
-			when "001" => 
-				y_buf(2) <= '1';
-			
-			when "010" =>
-				y_buf(11) <= '1';
-			
-			when "011" =>
-				y_buf(13) <= '1';
-			
-			when "100" =>
-				y_buf(14) <= '1';
-			
-			when "101" =>
-				y_buf(16) <= '1';
-			
-			when "110" =>
-				y_buf(17) <= '1';
-			
-			when "111" =>
-				y_buf(18) <= '1';
-			
-			when others => null;
-		end case;
-		
-		case Y3 is
-			when "01" => 
-				y_buf(3) <= '1';
-			
-			when "10" =>
-				y_buf(7) <= '1';
-			
-			when "11" =>
-				y_buf(19) <= '1';
-			
-			when others => null;
-		end case;
-		
-		case Y4 is
-			when "01" => 
-				y_buf(4) <= '1';
-			
-			when "10" =>
-				y_buf(8) <= '1';
-			
-			when "11" =>
-				y_buf(20) <= '1';
-			
-			when others => null;
-		end case;
-		
-		
-	end process;
+	y(1)  <= y1_decoded(1);
+	y(5)  <= y1_decoded(2);
+	y(6)  <= y1_decoded(3);
+	y(9)  <= y1_decoded(4);
+	y(10) <= y1_decoded(5);
+	y(12) <= y1_decoded(6);
+	y(15) <= y1_decoded(7);
+	y(20) <= y1_decoded(8);
+	y(21) <= y1_decoded(9);
+	y(22) <= y1_decoded(10);
+	y(23) <= y1_decoded(11);
+	y(24) <= y1_decoded(12);
+	y(25) <= y1_decoded(13);
 	
-	y<= y_buf when RegCom(11)='0' else (others=>'0');
+	y(2)  <= y2_decoded(1);
+	y(11) <= y2_decoded(2);
+	y(13) <= y2_decoded(3);
+	y(14) <= y2_decoded(4);
+	y(16) <= y2_decoded(5);
+	y(17) <= y2_decoded(6);
+	y(18) <= y2_decoded(7);
+	
+	y(3)  <= y3_decoded(1);
+	y(7)  <= y3_decoded(2);
+	y(19) <= y3_decoded(3);
+	
+	y(4)  <= y4_decoded(1);
+	y(8)  <= y4_decoded(2);
 end architecture control_unit;

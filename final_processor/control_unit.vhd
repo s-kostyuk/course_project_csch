@@ -73,14 +73,26 @@ architecture control_unit of control_unit is
 	signal RegCom:TCommand;
 	signal PC:integer;
 	signal y_buf: std_logic_vector(25 downto 1);
-	signal x_decoded: std_logic_vector(10 downto 0);
+	signal x_decoded: std_logic_vector(15 downto 0);
+	
+	component decoder is
+		generic(
+			M: integer := 4
+			);
+		port(D: in std_logic_vector (M-1 downto 0);
+			En: in std_logic;
+			Q: out std_logic_vector (2**M -1 downto 0)
+			); 
+	end component;
 begin
+	x_dc: decoder port map(D => RegCom(10 downto 7), En => RegCom(11), Q => x_decoded);
+	
 	process(rst,clk) is
 		variable PCv:integer range 0 to 54;
 	begin
 		if rst='0' then PCv:=0;
 		elsif rising_edge(clk) then
-			if RegCom(11)='1' and (x_decoded and x) = "0000000000" then
+			if RegCom(11)='1' and (x_decoded(11 downto 1) and x) = "0000000000" then
 				PCv:=conv_integer(RegCom(6 downto 1));
 			else
 				PCv:=PCv+1;
@@ -95,15 +107,13 @@ begin
 		variable Y2: std_logic_vector (2 downto 0);
 		variable Y3: std_logic_vector (1 downto 0);
 		variable Y4: std_logic_vector (1 downto 0);
-		variable X_index: integer range 15 downto 0;
+		
 	begin
 		y_buf <= (others => '0');
 		Y1 := RegCom(10 downto 7);
 		Y2 := RegCom(6  downto 4);
 		Y3 := RegCom(3  downto 2);
 		Y4 := RegCom(1  downto 0);
-		X_index := conv_integer(RegCom(10 downto 7));
-		x_decoded <= (others => '0');
 		
 		case Y1 is
 			when "0001" => 
@@ -200,12 +210,6 @@ begin
 			when others => null;
 		end case;
 		
-		if (x_index = 0 or RegCom(11)='0') then
-			x_decoded <= (others => '0');
-		else 
-			x_decoded(X_index - 1) <= '1';
-		end if;
-			
 		
 	end process;
 	

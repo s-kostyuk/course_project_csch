@@ -95,7 +95,7 @@ begin
 		variable Y2: std_logic_vector (2 downto 0);
 		variable Y3: std_logic_vector (1 downto 0);
 		variable Y4: std_logic_vector (1 downto 0);
-		variable X_index: integer range 11 downto 0;
+		variable X_index: integer range 15 downto 0;
 	begin
 		y_buf <= (others => '0');
 		Y1 := RegCom(10 downto 7);

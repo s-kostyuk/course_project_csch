@@ -73,12 +73,13 @@ architecture control_unit of control_unit is
 	signal RegCom:TCommand;
 	signal PC:integer;
 	signal y_buf: std_logic_vector(25 downto 1);
-	signal x_decoded: std_logic_vector(15 downto 0);
+	signal x_decoded: std_logic;
 	signal y1_decoded: std_logic_vector(15 downto 0);
 	signal y2_decoded: std_logic_vector(7 downto 0);
 	signal y3_decoded: std_logic_vector(3 downto 0);
 	signal y4_decoded: std_logic_vector(3 downto 0);
 	signal not_p: std_logic;
+	signal x_buf: std_logic_vector(15 downto 0);
 	
 	component decoder is
 		generic(
@@ -89,25 +90,38 @@ architecture control_unit of control_unit is
 			Q: out std_logic_vector (2**N -1 downto 0)
 			); 
 	end component;
+	
+	component mx is
+		generic(
+			N: integer := 4
+			);
+		port(
+			A: in std_logic_vector(N-1 downto 0);
+			D: in std_logic_vector(2**N-1 downto 0);
+			En: in std_logic;
+			Q: out std_logic
+			);
+	end component;
 begin
 	not_p <= not RegCom(11);
+	x_buf <= "0000" & x & "0";
 	
-	x_dc: decoder
+	x_mx: mx
 		generic map(N => 4)
-		port map(D => RegCom(10 downto 7), En => not_p, Q => x_decoded);
+		port map(A => RegCom(10 downto 7), D => x_buf, En => '0', Q => x_decoded);
 	
 	y1_dc: decoder
 		generic map(N => 4)
 		port map(D => RegCom(10 downto 7), En => RegCom(11), Q => y1_decoded);
-		
+	
 	y2_dc: decoder
 		generic map(N => 3)
 		port map(D => RegCom(6 downto 4), En => RegCom(11), Q => y2_decoded);
-		
+	
 	y3_dc: decoder
 		generic map(N => 2)
 		port map(D => RegCom(3 downto 2), En => RegCom(11), Q => y3_decoded);
-		
+	
 	y4_dc: decoder
 		generic map(N => 2)
 		port map(D => RegCom(1 downto 0), En => RegCom(11), Q => y4_decoded);
@@ -118,7 +132,7 @@ begin
 	begin
 		if rst='0' then PCv:=0;
 		elsif rising_edge(clk) then
-			if RegCom(11)='1' and (x_decoded(11 downto 1) and x) = 0 then
+			if RegCom(11)='1' and x_decoded = '0' then
 				PCv:=conv_integer(RegCom(6 downto 1));
 			else
 				PCv:=PCv+1;

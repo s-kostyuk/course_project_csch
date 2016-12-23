@@ -96,7 +96,7 @@ begin
 	of_in <= of_sum when y(5) = '1'
 	else overflow;
 		
-	CnTin <= conv_std_logic_vector(N, M) when y(3) = '1'
+	CnTin <= conv_std_logic_vector(N, M) when y(4) = '1'
 	else CnT - 1 when y(8) = '1'
 	else CnT;
 		

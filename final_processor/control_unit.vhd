@@ -72,7 +72,6 @@ architecture control_unit of control_unit is
 	);
 	signal RegCom:TCommand;
 	signal PC:integer;
-	signal y_buf: std_logic_vector(25 downto 1);
 	signal x_decoded: std_logic;
 	signal y1_decoded: std_logic_vector(15 downto 0);
 	signal y2_decoded: std_logic_vector(7 downto 0);

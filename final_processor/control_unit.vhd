@@ -3,8 +3,9 @@ use IEEE.STD_LOGIC_1164.all;
 entity control_unit is
 	port(
 		clk, rst : in STD_LOGIC;
-		x : in STD_LOGIC_VECTOR(10 downto 0);
-		y : out STD_LOGIC_VECTOR(25 downto 1)
+		x : in STD_LOGIC_VECTOR(10 downto 1);
+		y : out STD_LOGIC_VECTOR(25 downto 1);
+		COP: in std_logic
 		);
 end control_unit;
 architecture control_unit of control_unit is
@@ -103,7 +104,7 @@ architecture control_unit of control_unit is
 	end component;
 begin
 	not_p <= not RegCom(11);
-	x_buf <= "0000" & x & "0";
+	x_buf <= "0000" & x & COP & "0";
 	
 	x_mx: mx
 		generic map(N => 4)

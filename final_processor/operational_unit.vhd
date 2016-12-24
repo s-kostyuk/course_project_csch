@@ -11,11 +11,10 @@ entity operational_unit is
 	port(
 		clk,rst : in STD_LOGIC;
 		y : in STD_LOGIC_VECTOR(25 downto 1);
-		COP : in std_logic;
 		d1 : in STD_LOGIC_VECTOR(2*N-1 downto 0);
 		d2 : in STD_LOGIC_VECTOR(N-1 downto 0);
 		rl, rh : out STD_LOGIC_VECTOR(N-1 downto 0);
-		x : out STD_LOGIC_vector(10 downto 0);
+		x : out STD_LOGIC_vector(10 downto 1);
 		IRQ1, IRQ2 : out std_logic
 		);
 end operational_unit;
@@ -122,7 +121,6 @@ begin
 	else '0';
 	
 	-- Осведомительные сигналы
-	x(0)  <= COP;
 	x(1)  <= B1(0);
 	x(2)  <= overflow;
 	x(3)  <= '1' when CnT = 0 else '0';

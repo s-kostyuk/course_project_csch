@@ -2,6 +2,8 @@
 
 Курсовой проект по компьютерной схемотехнике. Вариант №8.
 
+Source: https://github.com/s-kostyuk/course_project_csch/
+
 
 ### Формулировка задания
 
